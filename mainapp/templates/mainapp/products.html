@@ -51,7 +51,7 @@
 			</div>
 		</div>
 
-		<div class="products_list" style="margin-top: 50px;">
+    <div class="products_list" style="margin-top: 50px;">
     {% if category %}
       <div class="title clearfix">
         <h2>
@@ -62,7 +62,7 @@
         <div class="related-products" style="display: flex; justify-content: center; margin-top: 20px;">
         {% for product in products %}
         <div class="block">
-            <a href="{#% url 'basket:add' product.pk %}"><img src="/media/{{ product.img }}" alt="">
+            <a href="{% url 'basket:add' product.pk %}"><img src="/media/{{ product.img }}" alt="">
                 <div class="text">
                     <img src="/static/geekshop/img/icon-hover.png" alt="img">
                     <h4>{{ product.name }}</h4>
@@ -72,6 +72,7 @@
             </a>
         </div>
         {% endfor %}
+    	</div>
     </div>
 
 		<div class="related">
@@ -95,7 +96,8 @@
 			</div>
 
 		</div>
-	</div>
+
 
 	<div class="clr"></div>
+	</div>
 {% endblock %}
