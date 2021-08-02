@@ -10,6 +10,9 @@
  {{ user.first_name|default:'Пользователь' }}
             </a>
         </li>
+        <li>
+            <a href="#">колличество товаров {{ basket|length }}</a>
+        </li>
  {% endif %}
         <li>
  {% if user.is_authenticated %}
