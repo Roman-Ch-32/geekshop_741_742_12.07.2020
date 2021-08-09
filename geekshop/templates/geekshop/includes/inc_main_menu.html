@@ -10,6 +10,11 @@
  {{ user.first_name|default:'Пользователь' }}
             </a>
         </li>
+        {% if user.is_superuser %}
+        <li>
+            <a href="{% url 'admin_staff:users' %}">админка</a>
+        </li>
+        {% endif %}
         <li>
             <a href="{% url 'basket:view' %}" >
                 <span>
