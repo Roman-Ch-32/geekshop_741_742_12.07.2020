@@ -2,7 +2,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
-from authapp.forms import ShopUserRegisterForm
+from adminapp.forms import ProductCategoryEditForm
+from authapp.forms import ShopUserRegisterForm, ShopUserEditForm
 from authapp.models import ShopUser
 from mainapp.models import ProductCategory, Product
 from django.contrib.auth.decorators import user_passes_test
@@ -42,11 +43,41 @@ def user_create(request):
 
 
 def user_update(request, pk):
-    pass
+    title = "пользователи/обновление"
+    user = get_object_or_404(ShopUser, pk=pk)
+
+    if request.method == 'POST':
+        edit_form = ShopUserEditForm(request.POST, request.FILES, instance=user)
+        if edit_form.is_valid:
+            edit_form.save()
+            return HttpResponseRedirect(reverse("admin_staff:users"))
+    else:
+        edit_form = ShopUserEditForm(instance=user)
+
+    context = {
+        "title": title,
+        "update_form": edit_form
+    }
+
+    return render(request, "adminapp/user_update.html", context)
 
 
 def user_delete(request, pk):
-    pass
+    title = "удаление"
+
+    user = get_object_or_404(ShopUser, pk=pk)
+
+    context = {
+        'title': title,
+        'user_delete': user
+    }
+
+    if request.method == "POST":
+        user.is_active = False
+        user.save()
+        return HttpResponseRedirect(reverse("admin_staff:users"))
+        
+    return render(request, "adminapp/user_update.html", context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -55,39 +86,83 @@ def categories(request):
 
     categories_list = ProductCategory.objects.all()
 
-    content = {
+    context = {
         'title': title,
         'objects': categories_list
     }
 
-    return render(request, 'adminapp/categories.html', content)
+    return render(request, 'adminapp/categories.html', context)
 
 
 def category_create(request):
-    pass
+    title = "админка/создание категории"
+
+    categories_list = ProductCategory.objects.all()
+    new_category = ProductCategoryEditForm(request.POST, request.FILES)
+    
+    context = {
+        "title": title,
+        "categories_list": categories_list,
+        "new_category": new_category,
+    }
+
+    if request.method == 'POST':
+        if new_category.is_valid:
+            new_category.save()
+            return HttpResponseRedirect(reverse("admin_staff:categories"))
+        else:
+            return HttpResponseRedirect(reverse(("admin_staff:create")))
+    
+    return render(request, "adminapp/create.html", context)
 
 
 def category_update(request, pk):
-    pass
+    title = "категории обновление"
+
+    category = get_object_or_404(ProductCategory, pk=pk)
+    category_form = ProductCategoryEditForm(request.POST, request.FILES, instance=category)
+
+    context = {
+        "title": title,
+        "category": category,
+        "category_form": category_form,
+    }
+
+    if request.method == "POST":
+        if category_form.is_valid:
+            category.save()
+            return HttpResponseRedirect(reverse("admin_staff.categories"))
+        else:
+            return HttpResponseRedirect(reverse(("admin_staff:create")))
+
+    return render(request, 'adminapp/create.html', context)
 
 
 def category_delete(request, pk):
-    pass
+    title = "удаление"
+
+    category = get_object_or_404(ProductCategory, pk=pk)
+    categories_list = ProductCategory.objects.all()
+
+    context ={
+        "title": title,
+        "category": category,
+        'objects': categories_list
+    }
+
+    if request.method == "POST":
+        if category.is_active is True:
+            category.is_active = False
+            category.save()
+            return HttpResponseRedirect(reverse("admin_staff.categories"))
+        else:
+            return HttpResponseRedirect(reverse("admin_staff.categories"))
+
+    return render(request, 'adminapp/categories.html', context)
 
 
 def products(request, pk):
-    title = 'админка/продукт'
-
-    category = get_object_or_404(ProductCategory, pk=pk)
-    products_list = Product.objects.filter(category__pk=pk).order_by('name')
-
-    context = {
-        'title': title,
-        'category': category,
-        'objects': products_list,
-    }
-
-    return render(request, 'adminapp/products.html', context)
+    pass
 
 
 def product_create(request, pk):
