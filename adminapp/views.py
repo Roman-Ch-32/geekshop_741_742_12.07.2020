@@ -1,8 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from django.views.generic import DetailView
 
-from adminapp.forms import ProductCategoryEditForm
+from adminapp.forms import ProductCategoryEditForm, ProductEditForm
 from authapp.forms import ShopUserRegisterForm, ShopUserEditForm
 from authapp.models import ShopUser
 from mainapp.models import ProductCategory, Product
@@ -140,16 +141,13 @@ def category_update(request, pk):
 
 def category_delete(request, pk):
     title = "удаление"
-
     category = get_object_or_404(ProductCategory, pk=pk)
     categories_list = ProductCategory.objects.all()
-
-    context ={
+    context = {
         "title": title,
         "category": category,
-        'objects': categories_list
+        'objects': categories_list,
     }
-
     if request.method == "POST":
         if category.is_active is True:
             category.is_active = False
@@ -162,20 +160,84 @@ def category_delete(request, pk):
 
 
 def products(request, pk):
-    pass
+    title = 'админка/продукт'
+
+    category = get_object_or_404(ProductCategory, pk=pk)
+    products_list = Product.objects.filter(category__pk=pk).order_by('name')
+
+    context = {
+        'title': title,
+        'category': category,
+        'objects': products_list,
+    }
+
+    return render(request, 'adminapp/products.html', context)
 
 
 def product_create(request, pk):
-    pass
+    title = 'продукты/создание'
+    category = get_object_or_404(ProductCategory, pk=pk)
+
+    if request.method == 'POST':
+        product_form = ProductEditForm(request.POST, request.FILES)
+        if product_form.is_valid():
+            product_form.save()
+            return HttpResponseRedirect(reverse('adminapp:products', args=[pk]))
+    else:
+        product_form = ProductEditForm(initial={'category': category})
+
+    context = {
+        'title': title,
+        'update_form': product_form,
+        'category': category,
+    }
+    return render(request, 'adminapp/product_update.html', context)
 
 
 def product_read(request, pk):
-    pass
+    title = 'продукты/подробнее'
+    product = get_object_or_404(Product, pk=pk)
+
+    context = {
+        'title': title,
+        'product': product,
+    }
+    return render(request, 'adminapp/product_read.html', context)
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'adminapp/product_read.html'
+
+    def get(self, request, *args, **kwargs):
+        print(request)
 
 
 def product_update(request, pk):
-    pass
+    title = 'продукты/редактирование'
+
+    edit_product = get_object_or_404(Product, pk=pk)
+
+    if request.method == 'POST':
+        edit_form = ProductEditForm(request.POST, request.FILES, instance=edit_product)
+        if edit_form.is_valid():
+            edit_form.save()
+            return HttpResponseRedirect(reverse('adminapp:product_update', args=[edit_product.pk]))
+    else:
+        edit_form = ProductEditForm(instance=edit_product)
+
+    context = {
+        'title': title,
+        'update_form': edit_form,
+        'category': edit_product.category,
+    }
+    return render(request, 'adminapp/product_update.html', context)
 
 
 def product_delete(request, pk):
-    pass
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == 'GET':
+        product.is_active = False if product.is_active else True
+        product.save()
+        return HttpResponseRedirect(reverse('adminapp:products', args=[product.category.pk]))
