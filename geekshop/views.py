@@ -9,4 +9,7 @@ def index(request):
 
 
 def contact(request):
-    return render(request, 'geekshop/contact.html')
+    context = {
+
+    }
+    return render(request, 'geekshop/contact.html', context)
