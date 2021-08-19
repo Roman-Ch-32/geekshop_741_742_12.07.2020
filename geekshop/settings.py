@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'mainapp.context_processors.basket',
             ],
         },
     },
@@ -141,5 +142,13 @@ STATICFILES_FINDERS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = "/media/"
+
+DOMAIN_NAME = "localhost:8000"
+
+EMAIL_HOST = "nod3223.ya.ru"
+EMAIL_PORT = '25'
+EMAIL_HOST_USER = 'admin@local'
+EMAIL_HOST_PASSWORD = "geekshop"
+EMAIL_USE_SSL = False
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
