@@ -1,10 +1,11 @@
 from django.contrib import auth
 from django.core.mail import send_mail
+from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from authapp.forms import ShopUserLoginForm, ShopUserEditForm, ShopUserRegisterForm
+from authapp.forms import ShopUserLoginForm, ShopUserEditForm, ShopUserRegisterForm, ShopUserProfileEditForm
 from authapp.models import ShopUser
 from geekshop import settings
 
@@ -47,9 +48,13 @@ def register(request):
     if request.method == 'POST':
         register_form = ShopUserRegisterForm(request.POST, request.FILES)
         if register_form.is_valid():
-            register_form.save()
-
-            return HttpResponseRedirect(reverse('auth:login'))
+            user = register_form.save()
+            if send_verify_mail(user):
+                print('сообщение отправлено')
+                return HttpResponseRedirect(reverse('auth:login'))
+            else:
+                print('сообщение НЕ отправлено')
+                return HttpResponseRedirect(reverse('auth:login'))
     else:
         register_form = ShopUserRegisterForm()
     context = {
@@ -59,20 +64,24 @@ def register(request):
     return render(request, 'authapp/register.html', context)
 
 
+@transaction.atomic()
 def edit(request):
     title = 'профиль'
 
     if request.method == 'POST':
         edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
-        if edit_form.is_valid():
+        profile_form = ShopUserProfileEditForm(request.POST, instance=request.user.shopuserprofile)
+        if edit_form.is_valid() and profile_form.is_valid():
             edit_form.save()
-
             return HttpResponseRedirect(reverse('auth:edit'))
+
     else:
         edit_form = ShopUserEditForm(instance=request.user)
+        profile_form = ShopUserProfileEditForm(instance=request.user.shopuserprofile)
     context = {
         'title': title,
-        'edit_form': edit_form
+        'edit_form': edit_form,
+        'profile_form': profile_form
     }
     return render(request, 'authapp/edit.html', context)
 
@@ -93,11 +102,11 @@ def verify(request, email, activation_key):
         if user.activation_key == activation_key and not user.is_activation_key_expired():
             user.is_active = True
             user.save()
-            auth.login(request, user)
-            return render(request, 'authapp/verification.html')
+            auth.login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+            return render(request, 'index.html')
         else:
             print(f'activation key error in user: {user.username}')
             return render(request, 'authapp/verification.html')
     except Exception as err:
         print(f'Error activation user: {err.args}')
-        return HttpResponseRedirect(reverse('index'))
+        return HttpResponseRedirect(reverse('authapp/verification.html'))
