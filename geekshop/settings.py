@@ -45,15 +45,29 @@ INSTALLED_APPS = [
     'authapp',
     'basketapp',
     'adminapp',
+    #"allauth",
+    #"allauth.account",
+    #"allauth.socialaccount",
+    #"allauth.socialaccount.providers.google",
     'social_django',
 ]
 
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+
 AUTH_USER_MODEL = 'authapp.ShopUser'
+LOGIN_URL = '/authapp/login/'
+LOGIN_REDIRECT_URL = '/'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.vk.VKOAuth2',
+    #'allauth.account.auth_backends.AuthenticationBackend',
 )
+SITE_ID = 2
+
 
 LOGIN_ERROR_URL = 'index.html'
 SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
@@ -168,9 +182,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = "/media/"
 
-DOMAIN_NAME = "geekshop.ru"
+DOMAIN_NAME = "http://localhost:8000"
 
-EMAIL_HOST = "nod3223.ya.ru"
+EMAIL_HOST = "localhost"
 EMAIL_PORT = '25'
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
