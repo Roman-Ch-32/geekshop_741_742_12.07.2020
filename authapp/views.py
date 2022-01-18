@@ -4,11 +4,11 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.db import transaction
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, UpdateView
 
-from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, UserProfilerForm
+from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, UserProfilerForm, UserProfilEditForm
 from authapp.models import ShopUser
 from basketapp.models import Basket
 from geekshop import settings
@@ -74,6 +74,13 @@ class EditListView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
 
     success_url = reverse_lazy('auth:edit')
 
+    def post(self, request, *args, **kwargs):
+        form = UserProfilerForm(data=request.POST, files=request.FILES, instance=request.user)
+        profile_form = UserProfilEditForm(data=request.POST, instance=request.user.shopuserprofile)
+        if form.is_valid() and profile_form.is_valid():
+            form.save()
+        return redirect(self.success_url)
+
     def form_valid(self, form):
         messages.set_level(self.request, messages.SUCCESS)
         messages.success(self.request, "профиль")
@@ -85,7 +92,7 @@ class EditListView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
 
     def get_context_data(self, **kwargs):
         context = super(EditListView, self).get_context_data(**kwargs)
-        context['basket'] = EditListView(instance=self.request.user)
+        context['profile'] = EditListView(instance=self.request.user.shopuserprofile)
         return context
 
 
