@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
 
-from .models import ShopUser
+from .models import ShopUser, ShopUserProfile
 
 
 class ShopUserLoginForm(AuthenticationForm):
@@ -53,11 +53,25 @@ class UserProfilerForm(UserChangeForm):
         model = ShopUser
         fields = ('username', 'email', 'first_name', 'last_name', 'image', 'age')
 
-    def __init__(self,*args,**kwargs):
-        super(UserProfilerForm, self).__init__(*args,**kwargs)
+    def __init__(self, *args, **kwargs):
+        super(UserProfilerForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['readonly'] = True
         self.fields['email'].widget.attrs['readonly'] = True
 
-        for field_name , field in self.fields.items():
+        for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
+
+
+class UserProfilEditForm(forms.ModelForm):
+
+    class Meta:
+        model = ShopUserProfile
+        exclude = ('user',)
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfilEditForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
