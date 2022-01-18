@@ -5,13 +5,20 @@
     <div class="container">
         <div class="row">
             <div class="mx-auto col-3">
-                <form class="form-horizontal" action="{% url 'auth:login' %}" method="post" >
+                 <form action="{% url 'auth:login' %}" method="post">
                     {% csrf_token %}
-                     {% if next %}
-                        <input type="hidden" name="next" value="{{ next }}">
-                    {% endif %}
-                    {{ login_form.as_p }}
-                    <button type="submit" class="btn btn-primary">Войти</button>
+                    <div class="form-group">
+                        <label class="small mb-1" for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                        {{ form.username }}
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="{{ form.password.id_for_label }}">Пароль</label>
+                        {{ form.password }}
+                    </div>
+                    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                        <a class="small" href="#">Забыли пароль?</a>
+                        <input class="btn btn-primary" type="submit" value="Авторизоваться">
+                    </div>
                 </form>
             </div>
         </div>
@@ -21,7 +28,7 @@
             </a>
          </button>
         <button class="btn btn-round form-control">
-            <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/">
+            <a href="{% url 'social:begin' 'vk-oauth2' %}?next='/'">
             Вход через ВКонтакте
             </a>
         </button>

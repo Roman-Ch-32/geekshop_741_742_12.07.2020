@@ -5,3 +5,4 @@ db.sqlite3
 /geekshop/static/geekshop/fonts
 #/mainapp/migrations
 .env
+

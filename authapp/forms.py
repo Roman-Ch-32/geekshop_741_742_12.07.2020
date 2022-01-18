@@ -1,5 +1,5 @@
 import hashlib
-from random import random
+import random
 
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
@@ -27,7 +27,7 @@ class ShopUserRegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(ShopUserRegisterForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = 'form-control py-4'
 
     def clean_age(self):
         data = self.cleaned_data['age']
@@ -36,42 +36,42 @@ class ShopUserRegisterForm(UserCreationForm):
 
         return data
 
-    def save(self, *args, **kwargs):
+    def save(self, commit=True):
         user = super(ShopUserRegisterForm, self).save()
-
         user.is_active = False
-        salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:6]
-
+        salt = hashlib.sha1(str(random.random()).encode('utf8')).hexdigest()[:6]
         user.activation_key = hashlib.sha1((user.email + salt).encode('utf-8')).hexdigest()
         user.save()
-
         return user
 
 
-class ShopUserEditForm(UserChangeForm):
+class UserProfilerForm(UserChangeForm):
+    image = forms.ImageField(widget=forms.FileInput(), required=False)
+    age = forms.IntegerField(widget=forms.NumberInput(), required=False)
+
     class Meta:
         model = ShopUser
-        fields = ('username', 'first_name', 'email', 'age', 'avatar', 'password')
+        fields = ('username', 'email', 'first_name', 'last_name', 'image', 'age')
 
     def __init__(self, *args, **kwargs):
-        super(ShopUserEditForm, self).__init__(*args, **kwargs)
+        super(UserProfilerForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['readonly'] = True
+        self.fields['email'].widget.attrs['readonly'] = True
+
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
-
-    def clean_age(self):
-        data = self.cleaned_data['age']
-        if data < 18:
-            raise forms.ValidationError("Вы слишком молоды!")
-
-        return data
+            field.widget.attrs['class'] = 'form-control py-4'
+        self.fields['image'].widget.attrs['class'] = 'custom-file-input'
 
 
-class ShopUserProfileEditForm(forms.ModelForm):
+class UserProfilEditForm(forms.ModelForm):
+
     class Meta:
         model = ShopUserProfile
-        fields = ('tagline', 'about_me', 'gender')
+        exclude = ('user',)
 
     def __init__(self, *args, **kwargs):
-        super(ShopUserProfileEditForm, self).__init__(*args, **kwargs)
+        super(UserProfilEditForm, self).__init__(*args, **kwargs)
+
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+

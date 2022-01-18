@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views.generic import DetailView
 
 from adminapp.forms import ProductCategoryEditForm, ProductEditForm
-from authapp.forms import ShopUserRegisterForm, ShopUserEditForm
+from authapp.forms import ShopUserRegisterForm, UserProfilerForm
 from authapp.models import ShopUser
 from mainapp.models import ProductCategory, Product
 from django.contrib.auth.decorators import user_passes_test
@@ -48,12 +48,12 @@ def user_update(request, pk):
     user = get_object_or_404(ShopUser, pk=pk)
 
     if request.method == 'POST':
-        edit_form = ShopUserEditForm(request.POST, request.FILES, instance=user)
+        edit_form = UserProfilerForm(request.POST, request.FILES, instance=user)
         if edit_form.is_valid:
             edit_form.save()
             return HttpResponseRedirect(reverse("admin_staff:users"))
     else:
-        edit_form = ShopUserEditForm(instance=user)
+        edit_form = UserProfilerForm(instance=user)
 
     context = {
         "title": title,

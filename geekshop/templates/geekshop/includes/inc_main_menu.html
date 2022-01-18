@@ -6,9 +6,23 @@
         <li><a href="{% url 'contact' %}">контакты</a></li>
  {% if user.is_authenticated %}
         <li>
-            <a href="{% url 'auth:edit' %}">
- {{ user.first_name|default:'Пользователь' }}
-            </a>
+            <div>
+                <a class="dropdown-toggle" href="" data-toggle="dropdown">
+                    {{ user.first_name|default:'Пользователь' }}
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu>">
+                    <li>
+                        <a href="{% url 'auth:edit' %}">Профиль</a>
+                    </li>
+                    <!--li>
+                        <a href="{ url 'ordersapp:orders_list' }">
+                            Заказы
+                        </a>
+                    </li-->
+                </ul>
+
+            </div>
         </li>
         {% if user.is_superuser %}
         <li>
@@ -17,12 +31,12 @@
         {% endif %}
         <li>
             <a href="{% url 'basket:view' %}" >
-                <span>
+                <div>
                     {% if basket %}
                         {{ basket.0.total_cost|floatformat:0 }} руб
                         ({{ basket.0.total_quantity }} шт )
                     {% endif %}
-                </span>
+                </div>
             </a>
         </li>
  {% endif %}
