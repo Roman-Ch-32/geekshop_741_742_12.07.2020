@@ -1,0 +1,20 @@
+[
+  {
+    "category": "стулья",
+    "name": "стул",
+    "short_description": "",
+    "description": "",
+    "img": "products_img/product-11.jpg",
+    "price": "1321.00",
+    "quantity": 4
+  },
+  {
+    "category": "кресла",
+    "name": "кресло",
+    "short_description": "",
+    "description": "",
+    "img": "products_img/product-11.jpg",
+    "price": "1321.00",
+    "quantity": 4
+  }
+]

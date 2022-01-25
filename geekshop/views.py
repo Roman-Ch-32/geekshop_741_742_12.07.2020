@@ -2,8 +2,14 @@ from django.shortcuts import render
 
 
 def index(request):
-    return render(request, 'geekshop/index.html')
+    context = {
+        "slogan": "Лучшее предложение"
+    }
+    return render(request, 'geekshop/index.html', context)
 
 
 def contact(request):
-    return render(request, 'geekshop/contact.html')
+    context = {
+
+    }
+    return render(request, 'geekshop/contact.html', context)

@@ -1,0 +1,36 @@
+{% extends 'authapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto col-3">
+                 <form action="{% url 'auth:login' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="small mb-1" for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                        {{ form.username }}
+                    </div>
+                    <div class="form-group">
+                        <label class="small mb-1" for="{{ form.password.id_for_label }}">Пароль</label>
+                        {{ form.password }}
+                    </div>
+                    <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                        <a class="small" href="#">Забыли пароль?</a>
+                        <input class="btn btn-primary" type="submit" value="Авторизоваться">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <button class="btn btn-round form-control">
+            <a href="{% url 'auth:register' %}" class="">
+                зарегистрироваться
+            </a>
+         </button>
+        <button class="btn btn-round form-control">
+            <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/">
+            Вход через ВКонтакте
+            </a>
+        </button>
+    </div>
+{% endblock %}
