@@ -45,10 +45,7 @@ INSTALLED_APPS = [
     'authapp',
     'basketapp',
     'adminapp',
-    #"allauth",
-    #"allauth.account",
-    #"allauth.socialaccount",
-    #"allauth.socialaccount.providers.google",
+    'ordersapp',
     'social_django',
 ]
 
@@ -170,7 +167,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'geekshop', 'static'),
+    os.path.join(BASE_DIR/'static'),
     os.path.join(BASE_DIR, 'geekshop', 'templates'),
 )
 
@@ -199,7 +196,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = 'tmp/email-messages/'
 
-LOGIN_ERROR_URL = '/'
 SOCIAL_AUTH_VK_OAUTH2_KEY = env('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = env('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.131'
