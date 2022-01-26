@@ -12,7 +12,7 @@ class ProductCategory(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name}'
 
     class Meta:
         verbose_name = 'категория'
@@ -30,7 +30,7 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} | {self.category}'
 
     class Meta:
         verbose_name = 'товар'
