@@ -65,7 +65,8 @@ AUTHENTICATION_BACKENDS = (
     #'allauth.account.auth_backends.AuthenticationBackend',
 )
 SITE_ID = 2
-###
+
+
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
