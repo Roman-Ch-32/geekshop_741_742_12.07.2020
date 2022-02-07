@@ -32,4 +32,4 @@ class Command(BaseCommand):
             new_product = Product(**product)
             new_product.save()
 
-        ShopUser.objects.create_superuser('admin', 'django@geekshop.local', 'admin', age='25')
+        ShopUser.objects.create_superuser('root', 'django@geekshop.local', 'admin', age='25')
