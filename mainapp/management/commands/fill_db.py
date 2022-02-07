@@ -1,35 +1,39 @@
-from django.core.management.base import BaseCommand
 import json
-import os
+from django.core.management.base import BaseCommand
 
 from authapp.models import ShopUser
 from mainapp.models import ProductCategory, Product
 
-JSON_PATH = 'mainapp/jsons'
 
+def load_from_json(file_name):
+    with open(file_name, mode='r', encoding='utf-8') as infile:
 
-def load_from_json(name_file):
-    with open(os.path.join(JSON_PATH, name_file + '.json'), "r", encoding='utf-8') as infile:
         return json.load(infile)
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        categories = load_from_json("categories")
+        categories = load_from_json('mainapp/fixtures/category.json')
 
         ProductCategory.objects.all().delete()
         for category in categories:
-            new_category = ProductCategory(**category)
+            cat = category.get('fields')
+            cat['id'] = category.get('pk')
+            new_category = ProductCategory(**cat)
             new_category.save()
 
-        products = load_from_json("products")
+# <form>
+# </form>
+        products = load_from_json('mainapp/fixtures/products.json')
 
         Product.objects.all().delete()
         for product in products:
-            category_name = product["category"]
-            _category = ProductCategory.objects.get(name=category_name)
-            product["category"] = _category
-            new_product = Product(**product)
-            new_product.save()
+            prod = product.get('fields')
+            category = prod.get('category')
+            _category = ProductCategory.objects.get(id=category)
+            prod['category'] = _category
+            new_category = Product(**prod)
+            new_category.save()
 
-        ShopUser.objects.create_superuser('admin', 'django@geekshop.local', 'admin', age='25')
+
+        ShopUser.objects.create_superuser('root', 'django@geekshop.local', 'admin', age='25')
