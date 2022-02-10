@@ -4,7 +4,6 @@ from django.db import models
 
 
 class ProductCategory(models.Model):
-    href = models.TextField(blank=True, verbose_name="ссылка")
     name = models.CharField(verbose_name="имя", max_length=128, unique=True)
     description = models.TextField(verbose_name="описание", max_length=750, blank=True)
     created = models.DateTimeField(auto_now_add=True)
