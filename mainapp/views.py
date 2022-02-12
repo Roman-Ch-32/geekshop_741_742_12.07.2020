@@ -54,22 +54,19 @@ from mainapp.models import Product, ProductCategory
 #     return render(request, 'mainapp/products.html', context)
 #
 #
-# def product(request, pk):
-#     title = 'продукты'
-#     links_menu = ProductCategory.objects.all()
-#
-#
-#     product = get_object_or_404(Product, pk=pk)
-#
-#     same_products = get_same_products(product)
-#     context = {
-#         'title': title,
-#         'links_menu': links_menu,
-#         'related_products': same_products,
-#
-#         'product': product,
-#     }
-#     return render(request, 'mainapp/product.html', context)
+def product(request, pk):
+    title = 'продукты'
+    links_menu = ProductCategory.objects.all()
+
+
+    product = get_object_or_404(Product, pk=pk)
+
+    context = {
+        'title': title,
+        'links_menu': links_menu,
+        'product': product,
+    }
+    return render(request, 'mainapp/product.html', context)
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
@@ -92,7 +89,7 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
-def products(request,id_category=None,page=1):
+def products(request, id_category=None, page=1):
 
     context = {
         'title': 'Geekshop | Каталог',
