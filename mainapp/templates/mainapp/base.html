@@ -44,7 +44,7 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
-{#                        <a class="nav-link" href="{% url 'authapp:edit' %}">{{ user.username }}#}
+{#                        <a class="nav-link" href="{% url 'authapp:profile' %}">{{ user.username }}#}
 {#                            <i class="fas fa-user-circle"></i>#}
 {#                        </a>#}
 
@@ -55,7 +55,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="nav-link text-dark" href="{% url 'authapp:edit' %}">
+                                    <a class="nav-link text-dark" href="{% url 'authapp:profile' %}">
                                         Профиль
                                     </a>
                                 </li>
@@ -96,7 +96,9 @@
 <script src="{% static  'vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static  'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-<script src="{% static  'js/basket.js' %}"></script>
+{#<script src="{% static  'js/basket.js' %}"></script>#}
+<script src="{% static  'js/jquery.formset.js' %}"></script>
+<script src="{% static  'js/order_scripts.js' %}"></script>
 
 
 <!-- FontAwesome script -->
