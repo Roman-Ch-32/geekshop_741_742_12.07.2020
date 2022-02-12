@@ -20,6 +20,9 @@ from django.urls import path, include, re_path
 
 from geekshop.views import index, contact
 
+import debug_toolbar
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', include('mainapp.urls', namespace='products'), name='products'),
@@ -32,8 +35,5 @@ urlpatterns = [
     path('orders/', include('ordersapp.urls', namespace='orders')),
 ]
 
-if settings.DEBUG:
-   import debug_toolbar
-
-   urlpatterns += [re_path(r'^__debug__/', include(debug_toolbar.urls))]
-
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += [path('debug/', include(debug_toolbar.urls))]

@@ -93,7 +93,11 @@ MIDDLEWARE = [
 
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
+
+ROOT_URLCONF = 'geekshop.urls'
 
 
 if DEBUG:
@@ -121,8 +125,6 @@ if DEBUG:
         'template_profiler_panel.panels.template.TemplateProfilerPanel',
     ]
 
-ROOT_URLCONF = 'geekshop.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -146,7 +148,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'geekshop.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -209,6 +210,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR/'static'),
     os.path.join(BASE_DIR, 'geekshop', 'templates'),
 )
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -221,6 +223,11 @@ STATICFILES_FINDERS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = "/media/"
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale/'),
+)
+
 
 DOMAIN_NAME = "http://localhost:8000"
 
