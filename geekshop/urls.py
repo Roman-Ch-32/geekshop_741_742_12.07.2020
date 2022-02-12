@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
 
-from geekshop.views import index, contact
+from mainapp.views import index
 
 import debug_toolbar
 
@@ -30,7 +30,7 @@ urlpatterns = [
     path('auth/', include('authapp.urls', namespace='auth'), name='auth'),
     path('basket/', include('basketapp.urls', namespace='basket'), name='basket'),
     path('', index, name='index'),
-    path('contact/', contact, name='contact'),
+    # path('contact/', contact, name='contact'),
     path('', include('social_django.urls', namespace='social')),
     path('orders/', include('ordersapp.urls', namespace='orders')),
 ]
