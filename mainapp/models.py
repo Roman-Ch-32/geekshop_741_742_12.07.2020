@@ -23,7 +23,7 @@ class Product(models.Model):
     name = models.CharField(verbose_name="имя", max_length=128, unique=True)
     short_description = models.CharField(verbose_name="короткое описание", max_length=256, blank=True)
     description = models.TextField(verbose_name="описание", max_length=1000, blank=True)
-    img = models.ImageField(upload_to="products_img", blank=True, verbose_name="картинка")
+    image = models.ImageField(upload_to="product_image", blank=True, verbose_name="картинка")
     price = models.DecimalField(verbose_name="цена", max_digits=10, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(verbose_name='колличество', default=0)
     is_active = models.BooleanField(default=True)

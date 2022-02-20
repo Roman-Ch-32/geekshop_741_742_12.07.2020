@@ -3,10 +3,10 @@ from basketapp.models import Basket
 
 def basket(request):
     print('корзинка')
-    basket = []
+    baskets = []
 
     if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
+        baskets = Basket.objects.filter(user=request.user)
     return {
-        'basket': basket,
+        'baskets': baskets,
     }

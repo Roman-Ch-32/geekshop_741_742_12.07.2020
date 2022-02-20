@@ -9,7 +9,7 @@
  * Licensed under the New BSD License
  * See: http://www.opensource.org/licenses/bsd-license.php
  */
-;(function($) {
+function ($) {
     $.fn.formset = function(opts)
     {
         var options = $.extend({}, $.fn.formset.defaults, opts),
@@ -247,4 +247,5 @@
         removed: null,                   // Function called each time a form is deleted
         hideLastAddForm: false           // When set to true, hide last empty add form (becomes visible when clicking on add button)
     };
-})(jQuery);
+};
+(jQuery);
