@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'social_django',
     'debug_toolbar',
     'template_profiler_panel',
+    'django_extensions',
 ]
 
 ACCOUNT_AUTHENTICATION_METHOD = "email"

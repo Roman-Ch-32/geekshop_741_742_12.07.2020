@@ -98,7 +98,7 @@ def products(request, id_category=None, page=1):
     if id_category:
         products= Product.objects.filter(category_id=id_category)
     else:
-        products = Product.objects.all()
+        products = Product.objects.all().select_related('category')[:3]
 
     paginator = Paginator(products, per_page=3)
 
