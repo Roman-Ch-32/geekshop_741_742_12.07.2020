@@ -94,7 +94,3 @@ class EditListView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
         context = super(EditListView, self).get_context_data(**kwargs)
         context['profile'] = EditListView(instance=self.request.user.shopuserprofile)
         return context
-
-
-class GoogleAuth(LoginView, BaseClassContextMixin):
-    template_name = "authapp/google_auth.html"

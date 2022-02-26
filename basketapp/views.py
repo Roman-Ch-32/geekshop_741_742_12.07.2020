@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
+from django.db import connection
+from django.db.models import F, Q
 
 from basketapp.models import Basket
 from mainapp.models import Product
@@ -16,10 +17,13 @@ def basket_add(request, id):
     user_select = request.user
     product = Product.objects.get(id=id)
     baskets = Basket.objects.filter(user=user_select, product=product)
+    test = get_object_or_404(Product, pk=500)
     if baskets:
         basket = baskets.first()
-        basket.quantity += 1
+        basket.quantity = F('quantity')+1
         basket.save()
+        update_queries = list(filter(lambda x: 'UPDATE' in x['sql'], connection.queries))
+        print(f'basket_add {update_queries} ')
     else:
         Basket.objects.create(user=user_select, product=product, quantity=1)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
