@@ -9,6 +9,7 @@ class ProductCategory(models.Model):
     description = models.TextField(verbose_name="описание", max_length=750, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -26,6 +27,7 @@ class Product(models.Model):
     img = models.ImageField(upload_to="products_img", blank=True, verbose_name="картинка")
     price = models.DecimalField(verbose_name="цена", max_digits=10, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(verbose_name='колличество', default=0)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
