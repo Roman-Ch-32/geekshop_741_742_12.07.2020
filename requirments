@@ -1,4 +1,3 @@
-asgiref==3.4.1
 Command==0.1.0
 Django==3.2.5
 memory-profiler==0.58.0
